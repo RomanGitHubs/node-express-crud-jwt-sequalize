@@ -5,10 +5,10 @@ const { signToken } = require('../utils/token.js');
 const PRIVATE_KEY = readFileSync('./config/private_key.pem', 'utf8')
 
 const setCookie = async (req, res, next) => {
-  const user = req.user
+  const user = req.body
 
   if (!user) {
-    return res.status(400).json({ message: 'User must be provided' })
+    return res.status(400).json({ message: 'Должен быть предоставлен пользователь' })
   }
 
   try {
@@ -20,23 +20,23 @@ const setCookie = async (req, res, next) => {
       }
     )
 
-    let refreshToken
-    if (!req.cookies[COOKIE_NAME]) {
-      refreshToken = await signToken({ userId: user.userId }, PRIVATE_KEY, {
-        algorithm: 'RS256',
-        expiresIn: '7d'
-      })
-
-      res.cookie(COOKIE_NAME, refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none'
-      })
-    }
+    // let refreshToken
+    // if (!req.cookies[COOKIE_NAME]) {
+    //   refreshToken = await signToken({ userId: user.userId }, PRIVATE_KEY, {
+    //     algorithm: 'RS256',
+    //     expiresIn: '7d'
+    //   })
+    //
+    //   res.cookie(COOKIE_NAME, refreshToken, {
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: 'none'
+    //   })
+    // }
 
     res.status(200).json({ user, accessToken })
   } catch (e) {
-    console.log('*setCookie middleware')
+    console.log('Ошибка в setCookie middleware')
     next(e)
   }
 }

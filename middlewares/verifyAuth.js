@@ -7,7 +7,7 @@ const PUBLIC_KEY = readFileSync('./config/public_key.pem', 'utf-8')
 const verifyAuth = async (req, res, next) => {
   const verificationCode = req.headers['x-verification-code']
 
-  if (!verificationCode || verificationCode !== 'VERIFICATION_CODE') {
+  if (!verificationCode || verificationCode !== VERIFICATION_CODE) {
     return res.status(403).json({ message: 'No verification code' })
   }
 
@@ -27,6 +27,7 @@ const verifyAuth = async (req, res, next) => {
 
     req.user = decoded
     next()
+
   } catch (e) {
     if (e.name === 'TokenExpiredError') {
       return res.status(401).json({ message: 'Refresh token has been expired' })

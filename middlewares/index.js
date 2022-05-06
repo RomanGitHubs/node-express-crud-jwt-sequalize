@@ -2,7 +2,7 @@ const { setCookie } = require('./setCookie.js');
 const { setSecurityHeaders } = require('./setSecurityHeaders.js');
 const { verifyAccess } = require('./verifyAccess.js');
 const { verifyAuth } = require('./verifyAuth.js');
-const { verifyPermission } = require('./verifyPermission.js');
+const { verifyPermission } = require('./verifyPermission');
 
 const VERIFICATION_CODE = 'verification_code';
 const COOKIE_NAME = 'qid';

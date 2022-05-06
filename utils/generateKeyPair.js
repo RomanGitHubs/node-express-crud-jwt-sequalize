@@ -20,9 +20,3 @@ function generateKeyPair() {
 }
 
 generateKeyPair()
-
-
-
-// https://nodejs.org/api/crypto.html#crypto_crypto_generatekeypairsync_type_options
-// https://tools.ietf.org/html/rfc8017#section-3
-

@@ -1,14 +1,15 @@
 const verifyPermission = async (req, res, next) => {
   const user = req.user
+  console.log('1212412')
 
   if (!user) {
-    return res.status(403).json({ message: 'User must be provided' })
+    return res.status(403).json({ message: 'Нужен пльзователь' })
   }
 
-  if (!user.role || user.role !== 'ADMIN') {
+  if (!user.role || user.role !== 'Admin') {
     return res
       .status(403)
-      .json({ message: 'Only admins can perform this action' })
+      .json({ message: 'Ты не Админ.' })
   }
 
   next()
