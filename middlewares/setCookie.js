@@ -1,11 +1,13 @@
 const { readFileSync } = require('fs');
-const { ACCESS_TOKEN_SECRET, COOKIE_NAME } = require('./index');
+const { ACCESS_TOKEN_SECRET } = require('./constans')
+const COOKIE_NAME = require('./index');
 const { signToken } = require('../utils/token.js');
 
-const PRIVATE_KEY = readFileSync('./config/private_key.pem', 'utf8')
+const PRIVATE_KEY = readFileSync('./utils/private_key.pem', 'utf8')
 
 const setCookie = async (req, res, next) => {
-  const user = req.body
+  const user = req.user
+  console.log(user, "// USER IN COOKIE")
 
   if (!user) {
     return res.status(400).json({ message: 'Должен быть предоставлен пользователь' })
@@ -13,7 +15,7 @@ const setCookie = async (req, res, next) => {
 
   try {
     const accessToken = await signToken(
-      { userId: user.userId, role: user.role },
+      { id: user.id, email: user.email ,role: user.role },
       ACCESS_TOKEN_SECRET,
       {
         expiresIn: '1h'
@@ -22,7 +24,7 @@ const setCookie = async (req, res, next) => {
 
     // let refreshToken
     // if (!req.cookies[COOKIE_NAME]) {
-    //   refreshToken = await signToken({ userId: user.userId }, PRIVATE_KEY, {
+    //   refreshToken = await signToken({ userId: user.id }, PRIVATE_KEY, {
     //     algorithm: 'RS256',
     //     expiresIn: '7d'
     //   })

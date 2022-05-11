@@ -1,18 +1,26 @@
 const verifyPermission = async (req, res, next) => {
   const user = req.user
-  console.log('1212412')
+  console.log(user)
 
-  if (!user) {
-    return res.status(403).json({ message: 'Нужен пльзователь' })
+  try {
+
+    if (!user) {
+      return res.status(403).json({ message: 'Нужен пльзователь' })
+    }
+
+    if (!user.role || user.role !== 'Admin') {
+      return res
+        .status(403)
+        .json({ message: 'Ты не Админ.' })
+    }
+
+    next()
+
+  } catch (e) {
+    console.error(e)
+    console.log('Ошибка в verifyPermission middleware')
+    next(e)
   }
-
-  if (!user.role || user.role !== 'Admin') {
-    return res
-      .status(403)
-      .json({ message: 'Ты не Админ.' })
-  }
-
-  next()
 }
 
 module.exports = verifyPermission;

@@ -1,9 +1,18 @@
-const { jwt } = require('jsonwebtoken');
+const jwt  = require('jsonwebtoken');
 
-const signToken = async (payload, secret, options) =>
-  await jwt.sign(payload, secret, options)
+const signToken = (payload, secret, options) => {
 
-const verifyToken = async (token, secret) =>
-  await jwt.verify(token, secret)
+  console.log(payload, '// PAYLOAD, token.js')
+  console.log(secret, '// SECRET, token.js')
+  console.log(options, '// OPTIONS, token.js')
+
+  return jwt.sign(payload, secret, options)
+}
+
+const verifyToken = (token, secret) => {
+  console.log(token)
+  console.log(secret)
+  return jwt.verify(token, secret)
+}
 
 module.exports = {signToken, verifyToken}

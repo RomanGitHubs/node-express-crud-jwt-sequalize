@@ -14,9 +14,9 @@ function generateKeyPair() {
     }
   })
 
-  writeFileSync('./config/public_key.pem', keyPair.publicKey)
+  writeFileSync('./utils/public_key.pem', keyPair.publicKey)
 
-  writeFileSync('./config/private_key.pem', keyPair.privateKey)
+  writeFileSync('./utils/private_key.pem', keyPair.privateKey)
 }
 
 generateKeyPair()

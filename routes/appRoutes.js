@@ -4,8 +4,8 @@ const authRoutes = require("./authRoutes.js");
 
 const router = new Router()
 
-// router.use(setCookie)
 router.use('/auth', authRoutes);
+router.use(setCookie)
 
 module.exports = router;
 

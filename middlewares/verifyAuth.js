@@ -1,28 +1,30 @@
 const { readFileSync } = require('fs');
-const { COOKIE_NAME, VERIFICATION_CODE } = require('./index');
+const COOKIE_NAME = require('./constans');
+const VERIFICATION_CODE = require('./constans');
 const { verifyToken } = require('../utils/token.js');
 
-const PUBLIC_KEY = readFileSync('./config/public_key.pem', 'utf-8')
+const PUBLIC_KEY = readFileSync('./utils/public_key.pem', 'utf-8')
 
 const verifyAuth = async (req, res, next) => {
   const verificationCode = req.headers['x-verification-code']
 
   if (!verificationCode || verificationCode !== VERIFICATION_CODE) {
-    return res.status(403).json({ message: 'No verification code' })
+    return res.status(403).json({ message: 'Нет кода верификации' })
   }
 
   const refreshToken = req.cookies[COOKIE_NAME]
 
   if (!refreshToken) {
-    return res.status(403).json({ message: 'No refresh token' })
+    return res.status(403).json({ message: 'Нет токена обновления' })
   }
 
   try {
     const decoded = await verifyToken(refreshToken, PUBLIC_KEY)
-    console.log('*Decoded refresh token', decoded)
 
+    console.log('Декодированный токен обновления', decoded)
     if (!decoded) {
-      return res.status(403).json({ message: 'Invalid refresh token' })
+      return res.status(403).json({ message: 'Неправильный токен обновления' })
+
     }
 
     req.user = decoded
@@ -30,10 +32,11 @@ const verifyAuth = async (req, res, next) => {
 
   } catch (e) {
     if (e.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Refresh token has been expired' })
+      return res.status(401).json({ message: 'Токен обновления просрочен' })
     }
 
-    console.log('*verifyAuth middleware')
+    console.error(e)
+    console.log('Ошибка в verifyAuth middleware')
     next(e)
   }
 }

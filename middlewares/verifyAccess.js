@@ -1,4 +1,4 @@
-const { ACCESS_TOKEN_SECRET } = require('./index');
+const { ACCESS_TOKEN_SECRET } = require('./constans')
 const { verifyToken } = require('../utils/token.js');
 
 const verifyAccess = async (req, res, next) => {
@@ -9,7 +9,9 @@ const verifyAccess = async (req, res, next) => {
   }
 
   try {
-    const decoded = await verifyToken(accessToken, ACCESS_TOKEN_SECRET)
+    console.log(accessToken)
+    console.log(">>>AA>>>", ACCESS_TOKEN_SECRET )
+    const decoded = verifyToken(accessToken, ACCESS_TOKEN_SECRET)
     console.log('Декодированный токен доступа: ', decoded)
 
     if (!decoded) {
@@ -24,8 +26,13 @@ const verifyAccess = async (req, res, next) => {
       return res.status(401).json({ message: 'Срок токена доступа истек' })
     }
 
+    console.error(e)
     console.log('Error verifyAccess middleware')
-    next(e)
+    next(
+      {status: 400,
+      message: e.message,
+      }
+    )
   }
 }
 
