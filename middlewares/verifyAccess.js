@@ -1,21 +1,18 @@
-const { ACCESS_TOKEN_SECRET } = require('./constans')
+const ACCESS_TOKEN_SECRET = require('../utils/constans')
 const { verifyToken } = require('../utils/token.js');
+const catchError = require("../utils/catchError");
 
 const verifyAccess = async (req, res, next) => {
-  const accessToken = req.headers.authorization.split(' ')[1]
-
-  if (!accessToken) {
-    return res.status(403).json({ message: 'Нет токена доступа' })
-  }
 
   try {
-    console.log(accessToken)
-    console.log(">>>AA>>>", ACCESS_TOKEN_SECRET )
+    if (!req.headers.authorization) catchError('Нет токена доступа', 403)
+
+    const accessToken = req.headers.authorization.split(' ')[1]
+
     const decoded = verifyToken(accessToken, ACCESS_TOKEN_SECRET)
-    console.log('Декодированный токен доступа: ', decoded)
 
     if (!decoded) {
-      return res.status(403).json({ message: 'Неправильный токен доступа' })
+      catchError('Неправильный токен доступа', 403)
     }
 
     req.user = decoded
@@ -25,14 +22,8 @@ const verifyAccess = async (req, res, next) => {
     if (e.name === 'TokenExpiredError') {
       return res.status(401).json({ message: 'Срок токена доступа истек' })
     }
-
-    console.error(e)
     console.log('Error verifyAccess middleware')
-    next(
-      {status: 400,
-      message: e.message,
-      }
-    )
+    next(e)
   }
 }
 

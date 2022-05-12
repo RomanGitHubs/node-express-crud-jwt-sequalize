@@ -1,23 +1,21 @@
+const catchError = require("../utils/catchError.js")
+
 const verifyPermission = async (req, res, next) => {
   const user = req.user
-  console.log(user)
 
   try {
 
     if (!user) {
-      return res.status(403).json({ message: 'Нужен пльзователь' })
+      catchError('Нужен пльзователь' , 403)
     }
 
     if (!user.role || user.role !== 'Admin') {
-      return res
-        .status(403)
-        .json({ message: 'Ты не Админ.' })
+      catchError('Ты не Админ' , 403)
     }
 
     next()
 
   } catch (e) {
-    console.error(e)
     console.log('Ошибка в verifyPermission middleware')
     next(e)
   }

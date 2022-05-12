@@ -1,10 +1,14 @@
 const { Router } = require("express");
 const bodyParser = require("body-parser");
-const { verifyAuth } = require("../middlewares");
 const { verifyAccess } = require("../middlewares");
 const verifyPermission = require("../middlewares/verifyPermission.js");
-const { getUser, registerUser, loginUser, logoutUser, removeUser, editUser} = require("../controllers/userController")
-const { verifyToken } = require("../utils/token");
+const {
+  getUser,
+  registerUser,
+  loginUser,
+  logoutUser,
+  removeUser,
+  editUser} = require("../controllers/user")
 const authRoutes = Router();
 
 authRoutes.use(bodyParser.json())
